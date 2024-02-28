@@ -4,6 +4,7 @@ import com.blogmanagement.blogmanagement.Error.BlogNotFoundException;
 import com.blogmanagement.blogmanagement.Model.BlogModel;
 import com.blogmanagement.blogmanagement.Repository.BlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class BlogServiceImpl implements BlogService {
         return blogRepository.save(blog);
     }
 
+    @Cacheable("Blogs")
     @Override
     public List<BlogModel> fetchAllBlogs() throws BlogNotFoundException {
         List<BlogModel> allBlogs = blogRepository.findAll();
@@ -36,6 +38,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
+
     public BlogModel getBlogsById(String id) throws BlogNotFoundException {
         Optional<BlogModel> blog = blogRepository.findById(id);
 

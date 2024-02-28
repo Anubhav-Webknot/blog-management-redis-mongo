@@ -6,6 +6,7 @@ import com.blogmanagement.blogmanagement.Service.BlogService;
 import com.blogmanagement.blogmanagement.dto.AllResponse;
 import com.blogmanagement.blogmanagement.dto.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
@@ -36,6 +37,7 @@ public class BlogController {
         long timebetween = Duration.between(start, end).toMillis();
         return  new Response(createBlogs,timebetween);
     }
+
 
     @GetMapping("/blog/{id}")
     public Response fetchBlogById(@PathVariable String id) throws BlogNotFoundException {
