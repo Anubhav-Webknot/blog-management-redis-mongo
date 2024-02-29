@@ -4,13 +4,14 @@ import com.blogmanagement.blogmanagement.Error.BlogNotFoundException;
 import com.blogmanagement.blogmanagement.Model.BlogModel;
 import com.blogmanagement.blogmanagement.Repository.BlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@CacheConfig(cacheNames = {"Blogs"})
 @Service
 public class BlogServiceImpl implements BlogService {
 
@@ -38,7 +39,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-
+    @Cacheable(value = "blogs",key = "#id")
     public BlogModel getBlogsById(String id) throws BlogNotFoundException {
         Optional<BlogModel> blog = blogRepository.findById(id);
 
@@ -52,6 +53,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
+    @CacheEvict(value = "blogs")
     public BlogModel updateBlogsById(String id, BlogModel blog) throws BlogNotFoundException {
 
         BlogModel existingBlog = blogRepository.findById(id)
@@ -69,6 +71,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
+    @CacheEvict(value = "blogs",allEntries = true)
     public BlogModel deleteBlogById(String id) throws BlogNotFoundException {
 
         BlogModel blog = blogRepository.findById(id)
